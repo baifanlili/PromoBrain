@@ -135,6 +135,7 @@ npm run dev
 - [数据库设计](docs/database.md)
 - [部署说明](docs/deployment.md)
 - [本地开发](docs/local-development.md)
+- [开发手册](docs/development-guide.md)
 - [面试讲解](docs/interview.md)
 - [压测说明](docs/pressure-test.md)
 - [开发进度](docs/progress.md)

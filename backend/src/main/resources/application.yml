@@ -1,5 +1,10 @@
 server:
   port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 
 spring:
   application:
@@ -17,6 +22,7 @@ spring:
     port: 5672
     username: promobrain
     password: promobrain
+    connection-timeout: 2s
 
 sa-token:
   token-name: Authorization
@@ -26,4 +32,5 @@ sa-token:
 
 promobrain:
   ai-service-url: http://localhost:8001
-
+  qdrant-url: http://localhost:6333
+  minio-endpoint: http://localhost:9000

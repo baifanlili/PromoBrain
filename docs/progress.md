@@ -16,6 +16,8 @@
 - [x] 完成后端 Maven 可打包骨架。
 - [x] 完成前端依赖安装和 build 验证。
 - [x] 完成 AI 服务虚拟环境和健康检查验证。
+- [x] 完成第一版最小闭环页面和后端 demo API。
+- [x] 完成 Redis Lua 预算扣减本地验证。
 - [ ] 拉取并启动完整 Docker 中间件。
 - [ ] 完成 MySQL 初始化脚本。
 - [ ] 完成 Docker Compose。
@@ -30,10 +32,12 @@
 - `backend`: `mvn -DskipTests package` 通过。
 - `ai-service`: `.venv` 创建完成，`/health` 返回 `{"status":"ok"}`。
 - `redis`: 通过 Docker Compose 启动成功。
+- `minimal-loop`: 前端页面、后端 demo API、FastAPI mock、Redis Lua 扣减已跑通。
 
 当前阻塞：
 
 - Docker Hub 拉取 `mysql`、`rabbitmq`、`minio`、`qdrant` 镜像时出现 TLS handshake timeout，需要在 Docker Desktop 配置代理后重试。
+- RabbitMQ 未启动时广告请求会返回 `mqSent=false`，主链路不会失败，符合第一版降级设计。
 
 ## 阶段规划
 
