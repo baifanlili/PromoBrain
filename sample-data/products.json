@@ -1,0 +1,14 @@
+[
+  {
+    "productName": "夏季轻薄防晒衣",
+    "category": "服饰",
+    "price": 129,
+    "stock": 5000,
+    "sellingPoints": ["UPF50+", "冰丝凉感", "轻薄透气"],
+    "targetUsers": ["户外通勤女性", "学生", "骑行人群"],
+    "painPoints": ["怕晒黑", "夏天闷热", "普通外套太厚"],
+    "keywords": ["防晒衣", "冰丝防晒衣", "夏季外套"],
+    "marginRate": 0.35
+  }
+]
+

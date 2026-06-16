@@ -1,0 +1,8 @@
+[
+  {
+    "ruleType": "FORBIDDEN_WORD",
+    "words": ["全网最低", "永久有效", "100%治愈"],
+    "riskLevel": "HIGH"
+  }
+]
+

@@ -1,0 +1,5 @@
+request_id,campaign_id,product_id,creative_id,keyword,event_type,cost,gmv
+req_demo_001,1001,101,5001,冰丝防晒衣,IMPRESSION,0,0
+click_demo_001,1001,101,5001,冰丝防晒衣,CLICK,0.8,0
+conv_demo_001,1001,101,5001,冰丝防晒衣,CONVERSION,0,129
+
