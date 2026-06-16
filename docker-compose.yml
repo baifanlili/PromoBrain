@@ -14,7 +14,7 @@ services:
       - ./sql/demo_data.sql:/docker-entrypoint-initdb.d/02-demo-data.sql:ro
 
   redis:
-    image: redis:7
+    image: redis:7-alpine
     container_name: promobrain-redis
     ports:
       - "6379:6379"
@@ -45,4 +45,3 @@ services:
     container_name: promobrain-qdrant
     ports:
       - "6333:6333"
-

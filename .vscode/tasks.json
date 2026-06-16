@@ -1,0 +1,52 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "PromoBrain: middleware",
+      "type": "shell",
+      "command": "docker compose up -d mysql redis rabbitmq minio qdrant",
+      "problemMatcher": []
+    },
+    {
+      "label": "PromoBrain: backend",
+      "type": "shell",
+      "command": "mvn spring-boot:run",
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "PromoBrain: ai-service",
+      "type": "shell",
+      "command": ".\\.venv\\Scripts\\python.exe -m uvicorn app.main:app --reload --port 8001",
+      "options": {
+        "cwd": "${workspaceFolder}/ai-service"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "PromoBrain: frontend",
+      "type": "shell",
+      "command": "npm run dev -- --host 127.0.0.1",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "PromoBrain: dev all",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "PromoBrain: middleware",
+        "PromoBrain: backend",
+        "PromoBrain: ai-service",
+        "PromoBrain: frontend"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

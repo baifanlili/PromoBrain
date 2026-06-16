@@ -11,11 +11,29 @@
 - [x] 编写 README 初版。
 - [x] 编写架构文档初版。
 - [x] 建立开发进度文档。
-- [ ] 完成后端 Maven 可启动骨架。
+- [x] 配置 Windows + VSCode 本地开发任务。
+- [x] 安装并验证 JDK 17、Maven、Node、Python 依赖。
+- [x] 完成后端 Maven 可打包骨架。
+- [x] 完成前端依赖安装和 build 验证。
+- [x] 完成 AI 服务虚拟环境和健康检查验证。
+- [ ] 拉取并启动完整 Docker 中间件。
 - [ ] 完成 MySQL 初始化脚本。
 - [ ] 完成 Docker Compose。
 - [ ] 完成前端 Vue3 可启动骨架。
 - [ ] 完成 FastAPI AI 服务可启动骨架。
+
+## 本地环境验证
+
+2026-06-16 已在 Windows 本地完成以下验证：
+
+- `frontend`: `npm install` 和 `npm run build` 通过。
+- `backend`: `mvn -DskipTests package` 通过。
+- `ai-service`: `.venv` 创建完成，`/health` 返回 `{"status":"ok"}`。
+- `redis`: 通过 Docker Compose 启动成功。
+
+当前阻塞：
+
+- Docker Hub 拉取 `mysql`、`rabbitmq`、`minio`、`qdrant` 镜像时出现 TLS handshake timeout，需要在 Docker Desktop 配置代理后重试。
 
 ## 阶段规划
 
@@ -142,4 +160,3 @@
 - [ ] Redis Lua 扣减预算 0.8 元。
 - [ ] MQ 异步写预算流水和点击日志。
 - [ ] Dashboard 展示曝光、点击、CTR、消耗、ROI。
-

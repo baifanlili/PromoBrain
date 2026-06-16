@@ -134,6 +134,7 @@ npm run dev
 - [接口设计](docs/api.md)
 - [数据库设计](docs/database.md)
 - [部署说明](docs/deployment.md)
+- [本地开发](docs/local-development.md)
 - [面试讲解](docs/interview.md)
 - [压测说明](docs/pressure-test.md)
 - [开发进度](docs/progress.md)
@@ -146,4 +147,3 @@ npm run dev
 - RabbitMQ 异步削峰，曝光、点击、预算流水和审核任务解耦。
 - RAG 与推广 Agent 工程化，避免大模型脱离业务知识生成内容。
 - Vue3 管理后台完整展示广告推广业务闭环。
-
