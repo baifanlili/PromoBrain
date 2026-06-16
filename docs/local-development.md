@@ -66,6 +66,15 @@ cd frontend
 npm run dev
 ```
 
+## 端到端测试
+
+```powershell
+cd frontend
+npm run test:e2e
+```
+
+Playwright 会自动启动前端开发服务器，但后端、AI 服务和 Redis 需要提前启动。
+
 ## 验证命令
 
 ```powershell
@@ -78,4 +87,3 @@ mvn -DskipTests package
 cd ..\ai-service
 .\.venv\Scripts\python.exe -c "from app.main import app; print(app.title)"
 ```
-

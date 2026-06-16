@@ -38,6 +38,15 @@
       "problemMatcher": []
     },
     {
+      "label": "PromoBrain: e2e",
+      "type": "shell",
+      "command": "npm run test:e2e",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "PromoBrain: dev all",
       "dependsOrder": "sequence",
       "dependsOn": [

@@ -51,5 +51,35 @@ cd ..\ai-service
 
 cd ..\frontend
 npm run build
+npm run test:e2e
 ```
 
+## 自动化测试
+
+第一版使用 Playwright 做端到端测试，测试文件位于：
+
+```text
+frontend/e2e/minimal-loop.spec.ts
+```
+
+该测试覆盖最小闭环：
+
+- 首页加载商品和广告计划。
+- 生成广告素材。
+- 推荐关键词。
+- 模拟广告请求。
+- 初始化预算。
+- Redis Lua 点击扣费。
+
+运行前需要保证：
+
+- 后端监听 `http://127.0.0.1:8080`。
+- AI 服务监听 `http://127.0.0.1:8001`。
+- Redis 已启动。
+
+运行命令：
+
+```powershell
+cd frontend
+npm run test:e2e
+```
