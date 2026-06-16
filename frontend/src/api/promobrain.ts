@@ -63,6 +63,19 @@ export interface ServingResult {
   mqSent: boolean
 }
 
+export interface HybridSearchResult {
+  query: string
+  elasticsearchUrl: string
+  qdrantUrl: string
+  items: Array<{
+    id: string
+    sourceType: string
+    content: string
+    score: number
+    sourceStatus: string
+  }>
+}
+
 /**
  * 获取第一版演示快照。
  * 页面初始化依赖该接口展示商品、计划、看板和架构亮点。
@@ -98,6 +111,19 @@ export async function requestServing(keyword: string) {
   const response = await http.post<ApiResult<ServingResult>>('/demo/serving/request', {
     requestId: `req_${Date.now()}`,
     keyword,
+  })
+  return response.data.data
+}
+
+/**
+ * 执行第二版混合检索。
+ * 后端负责合并 Elasticsearch 关键词召回和 Qdrant 语义召回，前端只展示统一结果。
+ */
+export async function hybridSearch(query: string) {
+  const response = await http.post<ApiResult<HybridSearchResult>>('/search/hybrid', {
+    merchantId: 1,
+    productId: 101,
+    query,
   })
   return response.data.data
 }

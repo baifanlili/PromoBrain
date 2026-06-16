@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record PromoBrainProperties(
         String aiServiceUrl,
         String qdrantUrl,
-        String minioEndpoint
+        String minioEndpoint,
+        String elasticsearchUrl
 ) {
 }

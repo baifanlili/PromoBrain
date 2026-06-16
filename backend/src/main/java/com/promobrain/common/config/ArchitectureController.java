@@ -1,6 +1,7 @@
 package com.promobrain.common.config;
 
 import com.promobrain.common.response.Result;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -35,7 +36,8 @@ public class ArchitectureController {
     public Result<Map<String, Object>> health() {
         return Result.ok(Map.of(
                 "service", "promobrain-backend",
-                "status", "ok"
+                "status", "ok",
+                "architectureStage", "v2-monolith-plus"
         ));
     }
 
@@ -45,21 +47,25 @@ public class ArchitectureController {
      */
     @GetMapping("/architecture")
     public Result<Map<String, Object>> architecture() {
-        return Result.ok(Map.of(
-                "version", "v1-monolith",
-                "backend", "Spring Boot 3 monolith",
-                "frontend", "Vue3 + Vite + Element Plus",
-                "aiService", properties.aiServiceUrl(),
-                "vectorStore", "Qdrant",
-                "onlinePath", List.of("Redis cache", "Redis Lua budget deduction", "RabbitMQ async logs"),
-                "queues", List.of(
+        Map<String, Object> architecture = new LinkedHashMap<>();
+        architecture.put("version", "v2-monolith-plus");
+        architecture.put("backend", "Spring Boot 3 monolith");
+        architecture.put("frontend", "Vue3 + Vite + Element Plus");
+        architecture.put("aiService", properties.aiServiceUrl());
+        architecture.put("vectorStore", "Qdrant");
+        architecture.put("search", "Elasticsearch keyword retrieval + Qdrant vector retrieval");
+        architecture.put("observability", "Spring Boot Actuator + Prometheus + Grafana");
+        architecture.put("resilience", "Sentinel flow control and local fallback");
+        architecture.put("cache", "Caffeine local cache + Redis shared cache");
+        architecture.put("onlinePath", List.of("Caffeine hot data", "Redis cache", "Redis Lua budget deduction", "RabbitMQ async logs"));
+        architecture.put("queues", List.of(
                         RabbitMqConfig.AD_EVENT_QUEUE,
                         RabbitMqConfig.BUDGET_TRANSACTION_QUEUE,
                         RabbitMqConfig.CREATIVE_AUDIT_QUEUE,
                         RabbitMqConfig.KNOWLEDGE_INDEX_QUEUE,
                         RabbitMqConfig.DASHBOARD_AGGREGATE_QUEUE
-                )
         ));
+        return Result.ok(architecture);
     }
 
     /**
@@ -72,7 +78,8 @@ public class ArchitectureController {
                 "redisTemplate", redisTemplate.getClass().getSimpleName(),
                 "rabbitTemplate", rabbitTemplate.getClass().getSimpleName(),
                 "qdrantUrl", properties.qdrantUrl(),
-                "minioEndpoint", properties.minioEndpoint()
+                "minioEndpoint", properties.minioEndpoint(),
+                "elasticsearchUrl", properties.elasticsearchUrl()
         ));
     }
 }

@@ -10,6 +10,7 @@ PromoBrain 是一个用于展示广告推广业务和后端架构能力的开源
 - 每个公开函数、Controller 接口、Service 方法、配置 Bean、Python 路由函数：说明用途和维护注意点。
 - Redis Lua、幂等、分布式锁、MQ 异步削峰、AI 降级、Qdrant 检索等关键架构逻辑。
 - 第一版 mock 或占位实现：必须说明后续会替换成什么真实实现。
+- 第二版缓存、限流、监控、混合检索相关代码：必须说明和第一版主链路的关系，避免为了展示技术而堆组件。
 
 ### 不要写的注释
 
@@ -29,7 +30,7 @@ return Result.ok(snapshot);
 
 ## 第一版架构边界
 
-第一版只实现以下架构能力：
+第一版实现以下架构能力：
 
 - Spring Boot 单体后端。
 - Redis Lua 预算原子扣减。
@@ -38,7 +39,14 @@ return Result.ok(snapshot);
 - FastAPI AI 服务。
 - Qdrant 向量库。
 
-第二版、第三版、第四版技术只写入规划，不提前混进第一版代码。
+第二版在单体内扩展以下能力：
+
+- Caffeine 本地缓存。
+- Sentinel 限流降级。
+- Prometheus/Grafana 监控。
+- Elasticsearch + Qdrant 混合检索。
+
+第三版、第四版技术只写入规划，不提前混进当前代码。
 
 ## 验证命令
 

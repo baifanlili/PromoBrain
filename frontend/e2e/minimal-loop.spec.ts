@@ -32,5 +32,10 @@ test('runs PromoBrain v1 minimal ad loop', async ({ page }) => {
   await page.getByRole('button', { name: '点击扣费 0.8 元' }).click()
   await expect(page.getByText('DEDUCT_SUCCESS')).toBeVisible()
   await expect(page.getByText('4999.2')).toBeVisible()
-})
 
+  // 第二版扩展：混合检索入口必须可用，Elasticsearch 不可用时也应返回降级结果。
+  await page.getByRole('button', { name: '执行混合检索' }).click()
+  const hybridSearchResult = page.locator('.step').filter({ hasText: '混合检索' }).locator('pre')
+  await expect(hybridSearchResult).toContainText('"sourceType": "KEYWORD"')
+  await expect(hybridSearchResult).toContainText('"sourceType": "VECTOR"')
+})

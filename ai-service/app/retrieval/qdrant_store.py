@@ -33,7 +33,7 @@ class QdrantVectorStore:
                 "status": "ok",
                 "collections": [item.name for item in collections.collections],
             }
-        except (UnexpectedResponse, OSError, ValueError) as exc:
+        except Exception as exc:
             return {
                 "status": "degraded",
                 "reason": exc.__class__.__name__,

@@ -16,7 +16,7 @@
 
 ## 架构阶段
 
-当前优先实现第一版架构：
+当前已进入第二版架构扩展，仍保持模块化单体：
 
 - Spring Boot 单体后端。
 - Redis Lua 预算原子扣减。
@@ -24,10 +24,13 @@
 - Vue3 管理前端。
 - FastAPI AI 服务。
 - Qdrant 向量库。
+- Caffeine 本地缓存。
+- Sentinel 限流降级。
+- Prometheus/Grafana 监控。
+- Elasticsearch 混合检索。
 
 后续版本再逐步加入：
 
-- 第二版：Caffeine 多级缓存、Sentinel、Prometheus/Grafana、Elasticsearch。
 - 第三版：Gateway/Auth/Ad/Knowledge/Dashboard 微服务拆分、Nacos、OpenFeign。
 - 第四版：ClickHouse 广告日志分析。
 

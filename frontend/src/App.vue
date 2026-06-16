@@ -7,11 +7,13 @@ import {
   deductBudget,
   fetchDemoSnapshot,
   generateCreative,
+  hybridSearch,
   initBudget,
   recommendKeyword,
   requestServing,
   type DeductResult,
   type DemoSnapshot,
+  type HybridSearchResult,
   type ServingResult,
 } from './api/promobrain'
 
@@ -22,6 +24,7 @@ const creativeResult = ref<Record<string, unknown>>()
 const keywordResult = ref<Record<string, unknown>>()
 const servingResult = ref<ServingResult>()
 const deductResult = ref<DeductResult>()
+const searchResult = ref<HybridSearchResult>()
 
 const campaignId = computed(() => snapshot.value?.campaign.id ?? 1001)
 const productId = computed(() => snapshot.value?.product.id ?? 101)
@@ -81,6 +84,16 @@ async function handleRecommendKeyword() {
 async function handleServingRequest() {
   await runAction('广告请求', () => requestServing(keyword.value), (data) => {
     servingResult.value = data
+  })
+}
+
+/**
+ * 执行第二版混合检索。
+ * Elasticsearch 不可用时后端会降级，页面仍能展示 Qdrant/mock 语义召回结果。
+ */
+async function handleHybridSearch() {
+  await runAction('混合检索', () => hybridSearch(keyword.value), (data) => {
+    searchResult.value = data
   })
 }
 
@@ -197,6 +210,13 @@ onMounted(loadSnapshot)
           <el-button :loading="loading" type="danger" @click="handleDeductBudget">点击扣费 0.8 元</el-button>
         </div>
         <pre v-if="deductResult">{{ prettyJson(deductResult) }}</pre>
+      </div>
+
+      <div class="step">
+        <h3>5. 第二版混合检索</h3>
+        <p>Elasticsearch 做关键词召回，Qdrant 做向量召回，后端统一合并排序。</p>
+        <el-button :loading="loading" @click="handleHybridSearch">执行混合检索</el-button>
+        <pre v-if="searchResult">{{ prettyJson(searchResult) }}</pre>
       </div>
     </section>
   </main>

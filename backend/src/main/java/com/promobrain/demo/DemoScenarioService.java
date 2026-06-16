@@ -2,12 +2,15 @@ package com.promobrain.demo;
 
 import com.promobrain.ai.AiServiceClient;
 import com.promobrain.common.config.RabbitMqConfig;
+import com.promobrain.common.config.SentinelConfig;
+import com.promobrain.common.sentinel.SentinelGuardService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,16 +18,23 @@ public class DemoScenarioService {
 
     private final AiServiceClient aiServiceClient;
     private final RabbitTemplate rabbitTemplate;
+    private final SentinelGuardService sentinelGuardService;
 
-    public DemoScenarioService(AiServiceClient aiServiceClient, RabbitTemplate rabbitTemplate) {
+    public DemoScenarioService(
+            AiServiceClient aiServiceClient,
+            RabbitTemplate rabbitTemplate,
+            SentinelGuardService sentinelGuardService
+    ) {
         this.aiServiceClient = aiServiceClient;
         this.rabbitTemplate = rabbitTemplate;
+        this.sentinelGuardService = sentinelGuardService;
     }
 
     /**
      * 组装第一版演示快照。
      * 目前使用稳定 mock 数据，目的是先固定前后端契约和展示链路。
      */
+    @Cacheable(cacheNames = "demoSnapshot", key = "'default'")
     public DemoSnapshot snapshot() {
         ProductSummary product = demoProduct();
         CampaignSummary campaign = demoCampaign();
@@ -49,13 +59,25 @@ public class DemoScenarioService {
      * 后续真实实现会先召回商品知识、历史文案和广告规则，再调用模型生成。
      */
     public Map<String, Object> generateCreative(Long productId) {
-        return aiServiceClient.generateCreative(Map.of(
-                "productId", productId,
-                "platform", "PDD",
-                "style", "CONVERSION",
-                "count", 3,
-                "requirement", "突出冰丝凉感和通勤防晒，避免夸大效果"
-        ));
+        return sentinelGuardService.guard(
+                SentinelConfig.AI_GENERATE_RESOURCE,
+                () -> aiServiceClient.generateCreative(Map.of(
+                        "productId", productId,
+                        "platform", "PDD",
+                        "style", "CONVERSION",
+                        "count", 3,
+                        "requirement", "突出冰丝凉感和通勤防晒，避免夸大效果"
+                )),
+                () -> Map.of(
+                        "degraded", true,
+                        "reason", "SENTINEL_BLOCKED",
+                        "creatives", List.of(Map.of(
+                                "title", "夏季通勤轻薄防晒衣",
+                                "content", "轻薄透气，适合通勤和户外短途防晒。",
+                                "riskLevel", "LOW"
+                        ))
+                )
+        );
     }
 
     /**
@@ -75,6 +97,18 @@ public class DemoScenarioService {
      * 主链路返回广告结果，同时把曝光日志写入 RabbitMQ；MQ 不可用时降级但不影响返回广告。
      */
     public ServingResult serving(String requestId, String keyword) {
+        return sentinelGuardService.guard(
+                SentinelConfig.AD_SERVING_RESOURCE,
+                () -> doServing(requestId, keyword),
+                () -> new ServingResult(List.of(), false)
+        );
+    }
+
+    /**
+     * 执行广告请求主逻辑。
+     * 该方法被 Sentinel 外层保护，保持内部代码只关注广告候选和异步日志。
+     */
+    private ServingResult doServing(String requestId, String keyword) {
         CampaignSummary campaign = demoCampaign();
         ProductSummary product = demoProduct();
         AdCandidate ad = new AdCandidate(

@@ -148,3 +148,32 @@ Lua 负责在 Redis 内原子完成幂等判断、预算判断和扣减。MySQL 
 - 广告排序失败：使用默认排序。
 - 模型接口不可用：启用 mock provider。
 
+## 8. 第二版架构扩展
+
+第二版仍保持 Spring Boot 单体，不提前拆微服务，只在单体内部补齐互联网项目常见的性能、稳定性和可观测性能力。
+
+### Caffeine 多级缓存
+
+- Caffeine 作为本地一级缓存，缓存热点商品、广告计划、演示快照和混合检索结果。
+- Redis 继续作为共享缓存、预算扣减和幂等控制组件。
+- 后续接入真实广告请求链路时，读取顺序为：Caffeine -> Redis -> MySQL。
+
+### Sentinel 限流降级
+
+- 广告请求资源：`ad-serving-request`。
+- AI 素材生成资源：`ai-creative-generate`。
+- 第一阶段使用本地静态规则，后续可接 Sentinel Dashboard 或 Nacos 动态规则。
+- 触发限流时返回明确降级结果，不阻断主页面。
+
+### Prometheus / Grafana
+
+- 后端通过 Spring Boot Actuator 暴露 `/actuator/prometheus`。
+- Prometheus 抓取后端指标。
+- Grafana 作为可视化面板入口，后续补充广告请求 QPS、预算扣减成功数、AI 调用耗时、MQ 积压等面板。
+
+### Elasticsearch 混合检索
+
+- Elasticsearch 承接关键词检索和广告规则检索。
+- Qdrant 承接向量语义检索。
+- 后端 `HybridSearchService` 负责合并候选并排序。
+- Elasticsearch 不可用时，混合检索降级为 mock 关键词结果 + Qdrant/mock 语义结果。

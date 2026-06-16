@@ -18,6 +18,8 @@
 - [x] 完成 AI 服务虚拟环境和健康检查验证。
 - [x] 完成第一版最小闭环页面和后端 demo API。
 - [x] 完成 Redis Lua 预算扣减本地验证。
+- [x] 完成第二版 Caffeine / Sentinel / Prometheus / Elasticsearch 架构骨架。
+- [x] 完成混合检索接口和前端验证入口。
 - [ ] 拉取并启动完整 Docker 中间件。
 - [ ] 完成 MySQL 初始化脚本。
 - [ ] 完成 Docker Compose。
